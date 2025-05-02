@@ -54,17 +54,6 @@ public class InputService {
         return mapper.updateTrans(params);
     }
 
-
-
-
-
-
-
-
-
-
-
-
     private static int pageLimit = 10; // 한페이지당 보여줄 글 갯수
     private static int blockLimit = 10; // 하단에 보여줄 페이지 번호 수
     public List<OrderDTO> pagingList(int page) {
