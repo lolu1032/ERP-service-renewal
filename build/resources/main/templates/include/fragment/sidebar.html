@@ -1,0 +1,100 @@
+<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" th:fragment="SidebarFragment">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <div class="sidebar-brand-icon"><img th:src="@{/img/logo/logo2.png}" ></div>
+    <div class="sidebar-brand-text mx-3">Debugerse</div>
+  </a>
+  <hr class="sidebar-divider my-0">
+  <li class="nav-item active">
+    <a class="nav-link" href="/"><span>Home</span></a>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item" th:classappend="${servletPath != null && servletPath.startsWith('/item')} ? 'active' : ''">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem"
+       aria-expanded="true" aria-controls="collapseItem">
+      <span>발주관리</span>
+    </a>
+    <div id="collapseItem" class="collapse" aria-labelledby="headingItem" data-parent="#accordionSidebar"
+         th:classappend="${servletPath != null && servletPath.startsWith('/item')} ? 'show' : ''">
+      <div class="collapse-inner">
+        <a class="collapse-item" th:href="@{/item/itemList}" th:classappend="${servletPath != null && servletPath == '/item/itemList'} ? 'active' : ''">
+          <span>조달계획 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/item/quoList}" th:classappend="${servletPath != null && servletPath == '/item/quoList'} ? 'active' : ''">
+          <span>견적서 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/item/addPlan}" th:classappend="${servletPath != null && servletPath == '/item/addPlan'} ? 'active' : ''">
+          <span>조달계획 등록</span>
+        </a>
+<!--        <a class="collapse-item" th:href="@{/item/transaction}" th:classappend="${servletPath != null && servletPath == '/item/transaction'} ? 'active' : ''">-->
+<!--          <span>거래조회</span>-->
+<!--        </a>-->
+      </div>
+    </div>
+  </li>
+  <li class="nav-item" th:classappend="${servletPath != null && servletPath.startsWith('/purchase')} ? 'active' : ''">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase"
+       aria-expanded="true" aria-controls="collapsePurchase">
+      <span>구매관리</span>
+    </a>
+    <div id="collapsePurchase" class="collapse" aria-labelledby="headingPurchase" data-parent="#accordionSidebar"
+         th:classappend="${servletPath != null && servletPath.startsWith('/purchase')} ? 'show' : ''">
+      <div class="collapse-inner">
+        <a class="collapse-item" th:href="@{/purchase/plan}" th:classappend="${servletPath != null && servletPath == '/purchase/plan'} ? 'active' : ''">
+          <span>조달계획 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/purchase/order}" th:classappend="${servletPath != null && servletPath == '/purchase/order'} ? 'active' : ''">
+          <span>발주서 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/purchase/inspection}" th:classappend="${servletPath != null && servletPath == '/purchase/inspection'} ? 'active' : ''">
+          <span>검수 조회</span>
+        </a>
+      </div>
+    </div>
+  </li>
+  <li class="nav-item" th:classappend="${servletPath != null && servletPath.startsWith('/input')} ? 'active' : ''">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInput"
+       aria-expanded="true" aria-controls="collapseInput">
+      <span>입고관리</span>
+    </a>
+    <div id="collapseInput" class="collapse" aria-labelledby="headingInput" data-parent="#accordionSidebar"
+         th:classappend="${servletPath != null && servletPath.startsWith('/input')} ? 'show' : ''">
+      <div class="collapse-inner">
+        <a class="collapse-item" th:href="@{/input/paging}" th:classappend="${servletPath != null && servletPath == '/input/paging'} ? 'active' : ''">
+          <span>입고 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/input/transaction}" th:classappend="${servletPath != null && servletPath == '/input/transaction'} ? 'active' : ''">
+          <span>거래명세서 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/input/bom}" th:classappend="${servletPath != null && servletPath == '/input/bom'} ? 'active' : ''">
+          <span>구매발주서 조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/input/insep}" th:classappend="${servletPath != null && servletPath == '/input/insep'} ? 'active' : ''">
+          <span>검수 조회</span>
+        </a>
+      </div>
+    </div>
+  </li>
+  <li class="nav-item" th:classappend="${servletPath != null && (servletPath.startsWith('/shipment') || servletPath.startsWith('/stock') || servletPath.startsWith('/stock-report'))} ? 'active' : ''">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShipment"
+       aria-expanded="true" aria-controls="collapseShipment">
+      <span>출고관리</span>
+    </a>
+    <div id="collapseShipment" class="collapse" aria-labelledby="headingShipment" data-parent="#accordionSidebar"
+         th:classappend="${servletPath != null && (servletPath.startsWith('/shipment') || servletPath.startsWith('/stock') || servletPath.startsWith('/stock-report'))} ? 'show' : ''">
+      <div class="collapse-inner">
+        <a class="collapse-item" th:href="@{/shipment/list}" th:classappend="${servletPath != null && servletPath == '/shipment/list'} ? 'active' : ''">
+          <span>출고등록</span>
+        </a>
+        <a class="collapse-item" th:href="@{/stock/list}" th:classappend="${servletPath != null && servletPath == '/shipment/list'} ? 'active' : ''">
+          <span>재고조회</span>
+        </a>
+        <a class="collapse-item" th:href="@{/stock/calculate}" th:classappend="${servletPath != null && servletPath == '/shipment/#'} ? 'active' : ''">
+          <span> 재고 산출</span>
+        </a>
+        <a class="collapse-item" th:href="@{/stock-report/generate}" th:classappend="${servletPath != null && servletPath == '/shipment/#'} ? 'active' : ''">
+          <span>현황조회</span>
+        </a>
+      </div>
+    </div>
+  </li>
+</ul>

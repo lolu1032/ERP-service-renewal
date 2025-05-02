@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- 상단 검색 -->
+        <div class="p-3 mb-3 bxShadow saerchForm">
+            <form th:action="@{/stock/list}" method="get">
+                <div class="row">
+                    <div class="searchFormInner mb-3">
+                        <div>
+                            <p>자재명</p>
+                            <div class="input-group">
+                                <input type="text" id="itemName" name="itemName" class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            <p>재고 상태</p>
+                            <div class="input-group">
+                                <select name="stockStatus" class="form-control">
+                                    <option value="">선택</option>
+                                    <option value="available">가용재고</option>
+                                    <option value="unavailable">비가용재고</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <p>최소 재고 수량</p>
+                            <div class="input-group">
+                                <input type="number" id="minQty" name="minQty" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="searchFormInner">
+                        <div class="dateInput">
+                            <p>입고 시작일</p>
+                            <div class="input-group date">
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                                <div class="input-group-append">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="deliveryDateInput">
+                            <p>입고 종료일</p>
+                            <div class="input-group date">
+                                <input type="date" class="form-control" id="endDate" name="endDate">
+                                <div class="input-group-append">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+
+                            <p>위치</p>
+                            <div class="input-group">
+                                <input type="text" id="loc" name="loc" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: auto;margin-right: .75rem;">검색</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="p-3 mb-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>재고 ID</th>
+                    <th>자재명</th>
+                    <th>수량</th>
+                    <th>상태</th>
+                    <th>위치</th>
+                    <th>재고 금액</th>
+                    <th>입고 일자</th>
+                    <th>유효 기간</th>
+                    <th style="text-align: center;">액션</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="stock : ${stockList}">
+                    <td th:text="${stock.stk_id}">재고 ID</td>
+                    <td th:text="${stock.item_name}">자재명</td>
+                    <td th:text="${stock.qty}">수량</td>
+                    <td th:text="${stock.status}">상태</td>
+                    <td th:text="${stock.loc}">위치</td>
+                    <td th:text="${stock.value}">재고 금액</td>
+                    <td th:text="${#dates.format(stock.in_date, 'yyyy-MM-dd')}">입고 일자</td>
+                    <td th:text="${#dates.format(stock.exp_date, 'yyyy-MM-dd')}">유효 기간</td>
+                    <td style="text-align: center;">
+                        <!-- 상세 보기 버튼 -->
+                        <a th:href="@{/stock/detail/{stkId}(stkId=${stock.stk_id})}" class="btn btn-outline-primary mr-2">상세</a>
+                        <!-- 공급가 보기 버튼 -->
+                        <a th:href="@{/stock/price/{stkId}(stkId=${stock.stk_id})}" class="btn btn-primary">공급가 확인</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+</html>

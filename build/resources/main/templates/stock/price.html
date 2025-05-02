@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="p-3 mb-3 bxShadow" th:if="${priceList != null and not #lists.isEmpty(priceList)}">
+            <div class="row" th:each="price : ${priceList}">
+                <div class="form-group w-50">
+                    <label>재고 ID</label>
+                    <input type="text" class="form-control" th:value="${price['stk_id']}" readonly /> <!-- 재고 ID -->
+                </div>
+                <div class="form-group w-50">
+                    <label>상품명</label>
+                    <input type="text" class="form-control" th:value="${price['item_name']}" readonly /> <!-- 상품명 -->
+                </div>
+                <div class="form-group w-50">
+                    <label>공급가</label>
+                    <input type="text" class="form-control" th:value="${price['price']}" readonly /> <!-- 공급가 -->
+                </div>
+                <div class="form-group w-50">
+                    <label>거래금액</label>
+                    <input type="text" class="form-control" th:value="${price['transaction_value']}" readonly /> <!-- 거래금액 -->
+                </div>
+                <div class="form-group w-50">
+                    <label>거래날짜</label>
+                    <input type="text" class="form-control" th:value="${price['transaction_date']}" readonly /> <!-- 거래 날짜 -->
+                </div>
+                <div class="form-group w-50">
+                    <label>거래번호</label>
+                    <input type="text" class="form-control" th:value="${price['refer_code']}" readonly /> <!-- 참조 번호  -->
+                </div>
+            </div>
+
+            <div class="tableBtn">
+                <a th:href="@{/stock/list}" class="btn btn-primary">목록</a>
+            </div>
+        </div>
+
+        <!-- 오류 메시지 출력 -->
+        <div class="p-3 mb-3 bxShadow" th:if="${error}">
+            <div class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
+            </div>
+        </div>
+
+        <!-- 가격 정보가 없을 때 메시지 출력 -->
+        <div class="p-3 mb-3 bxShadow" th:if="${priceList == null or #lists.isEmpty(priceList)}">
+            <div class="alert alert-warning" role="alert">
+                가격 정보를 찾을 수 없습니다.
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

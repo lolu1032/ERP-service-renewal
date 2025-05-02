@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+  <div>
+    <!-- 상단 검색 -->
+    <div class="p-3 mb-3 bxShadow saerchForm">
+      <form id="searchForm" class="row" th:action="@{/shipment/search}" method="get">
+        <div class="searchFormInner">
+          <div class="dateInput">
+            <p>요청 날짜</p>
+            <div class="input-group date">
+              <input type="date" class="form-control" id="reqDate" name="reqDate">
+              <div class="input-group-append">
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>품목명</p>
+            <div class="input-group">
+              <input type="text" id="itemName" class="form-control" name="itemName" placeholder="품목명">
+            </div>
+          </div>
+          <div>
+            <p>상태</p>
+            <select name="status" class="form-control">
+              <option value="">모든 상태</option>
+              <option value="REQUESTED">출고 요청</option>
+              <option value="PROCESSING">진행중</option>
+              <option value="COMPLETED">출고 완료</option>
+              <option value="REJECTED">반려</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">검색</button>
+      </form>
+    </div>
+    <!-- table -->
+    <div class="table-responsive p-3 bxShadow">
+      <table class="table">
+        <thead class="thead-light">
+        <tr>
+          <th>출고 ID</th>
+          <th>품목명</th>
+          <th>요청 수량</th>
+          <th>출고 수량</th>
+          <th>상태</th>
+          <th>요청 날짜</th>
+          <th>위치</th>
+          <th style="text-align: center;">액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="shipment : ${shipmentList}">
+          <td th:text="${shipment.shipId}"></td>
+          <td th:text="${shipment.itemName}"></td>
+          <td th:text="${shipment.reqQty}"></td>
+          <td th:text="${shipment.qty}"></td>
+          <td>
+              <span th:switch="${shipment.status}">
+                <span class="badge badge-warning" th:case="'REQUESTED'">출고 요청</span>
+                <span class="badge badge-info" th:case="'PROCESSING'">진행중</span>
+                <span class="badge badge-success" th:case="'COMPLETED'">출고 완료</span>
+                <span class="badge badge-danger" th:case="'REJECTED'">반려</span>
+                <span th:case="*" th:text="${shipment.status}"></span>
+              </span>
+          </td>
+          <td th:text="${shipment.reqDate != null ? #temporals.format(shipment.reqDate, 'yyyy-MM-dd') : ''}"></td>
+          <td th:text="${shipment.loc}"></td>
+          <td style="text-align: center;">
+            <a th:href="@{/shipment/detail/{id}(id=${shipment.shipId})}" class="btn btn-outline-primary btn-sm mr-2">상세</a>
+            <a th:href="@{/shipment/check-stock/{id}(id=${shipment.shipId})}" class="btn btn-primary btn-sm">재고 확인</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end">
+        <a href="/shipment/create" class="btn btn-primary">새 출고 요청</a>
+      </div>
+    </div>
+  </div>
+</th:block>
+</html>

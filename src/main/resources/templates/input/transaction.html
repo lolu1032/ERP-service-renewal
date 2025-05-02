@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="table-responsive p-3 bxShadow">
+            <div class="mb-3" style="display:flex; justify-content:end;">
+                <!-- 검색 폼 -->
+                <form method="post" action="/input/search" style="display:flex;">
+                    <div class="input-group" style="width:210px;">
+                        <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+                               aria-describedby="search-addon" name="keyword"/>
+                        <div class="input-group-append">
+                            <button class="input-group-text" id="search-addon" style="height: 43px;"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 메인 테이블 -->
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>발주코드</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>납기일자</th>
+                    <th>협력업체</th>
+                    <th>발주상태</th>
+                </tr>
+                </thead>
+                <tbody th:each="trans : ${list}">
+                <!-- 거래 정보 목록 렌더링 -->
+                <tr>
+                    <td th:text="${trans.orderCode}">발주코드</td>
+                    <td th:text="${trans.itemName}">상품명</td>
+                    <td th:text="${trans.qty}">수량</td>
+                    <td th:text="${trans.leadtime}">납기일자</td>
+                    <td th:text="${trans.supName}">협력업체</td>
+                    <td th:text="${trans.status}">발주상태</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(trans)}">
+                    <td colspan="6" style="text-align: center;">거래 명세서가 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="tableBtn">
+                <!-- 모달 열기 버튼 -->
+                <button type="button" class="modal-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal">추가</button>
+            </div>
+        </div>
+
+        <!-- 모달 -->
+        <div class="modal newModal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">거래명세서</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 모달 내부 폼 -->
+                        <form method="post" action="/input/transaction">
+                            <table class="table mb-3">
+                                <thead>
+                                <tr>
+                                    <th>발주코드</th>
+                                    <th>상품명</th>
+                                    <th>수량</th>
+                                    <th>납기일자</th>
+                                    <th>협력업체</th>
+                                    <th style="text-align: center;">발주상태</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-group-divider modal-table" th:each="trans, iterStat : ${trans}">
+                                <tr>
+                                    <td th:text="${trans.orderCode}">발주코드</td>
+                                    <td th:text="${trans.itemName}">상품명</td>
+                                    <td th:text="${trans.qty}">수량</td>
+                                    <td th:text="${trans.leadtime}">납기일자</td>
+                                    <td th:text="${trans.supName}">협력업체</td>
+                                    <td style="text-align: center;">
+                                        <select name="transSelect" class="form-select">
+                                            <option value="발주진행중" th:selected="${trans.status == '발주진행중'}">발주진행중</option>
+                                            <option value="발주마감" th:selected="${trans.status == '발주마감'}">발주마감</option>
+                                        </select>
+                                    </td>
+                                    <input type="hidden" name="orderCode" th:value="${trans.orderCode}">
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="btn btn-primary">저장</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+</html>

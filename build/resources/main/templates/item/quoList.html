@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="table-responsive p-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>견적서번호</th>
+                    <th>품목번호</th>
+                    <th>등록일자</th>
+                    <th>견적단가</th>
+                    <th>총금액</th>
+                    <th>거래상태</th>
+                    <!-- <th>거래상세</th> -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="quo : ${quoList}" th:id="${'list-item-' + quo.quo_id}">
+                    <td><input type="checkbox" class="check-item" data-name="${quo.quo_id}"></td>
+                    <td th:text="${quo.quo_id}">&nbsp;</td>
+                    <td th:text="${quo.item_id}">&nbsp;</td>
+                    <td th:text="${quo.date}">&nbsp;</td>
+                    <td th:text="${quo.price}">&nbsp;</td>
+                    <td th:text="${quo.total_amount}">&nbsp;</td>
+                    <td th:text="${quo.status}">&nbsp;</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="tableBtn">
+                <!-- 발주서 발행 버튼 -->
+                <button id="contractBtn" type="button" class="btn btn-primary" data-toggle="modal">계약 확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 견적서 등록 Modal -->
+
+
+    <div class="modal newModal fade" id="contractModal" tabindex="-1" role="dialog" aria-labelledby="contractModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">계약서</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive p-3 bxShadow">
+                        <div class="input-group">
+                            <input id="order_sup_id" class="form-control" type="text" hidden>
+                            <input id="order_sup_name" type="text" class="form-control" readonly>
+                            <div class="input-group-append">
+                                <span id="myBtn_in" class="input-group-text" data-toggle="modal" data-target="#searchModal">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <table class="mt-3">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>견적서 ID</th>
+                                <th>품목 ID</th>
+                                <th>견적수립날짜</th>
+                                <th>가격</th>
+                                <th>총 금액</th>
+                                <th>상태</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="modal-quo_id"></td>
+                                <td id="modal-item_id"></td>
+                                <td id="modal-date"></td>
+                                <td id="modal-price"></td>
+                                <td id="modal-total_amount"></td>
+                                <td id="modal-status"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button id="quoCreate" type="button" class="btn btn-primary">계약 승인</button>
+                </div>
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 협력업체 검색 모달 -->
+    <div class="modal newModal supplierModal fade" id="searchModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">협력업체 검색</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="searchInput" class="form-control" placeholder="검색할 내용을 입력하세요.">
+                    <table id="supplierList" class="mt-3">
+                        <thead>
+                        <tr>
+                            <th>회사 ID</th>
+                            <th>회사 코드</th>
+                            <th>회사 명</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 협력업체 데이터 -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button id="supSelect" type="button" class="btn btn-primary">선택</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 명세서 Modal -->
+    <div class="modal newModal fade" id="chitModal" tabindex="-1" role="dialog" aria-labelledby="chitModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">명세서</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="newModalTit"><h5>거래명세서</h5></div>
+                    <table class="mb-3">
+                        <tbody>
+                        <tr>
+                            <th>거래처명</th>
+                            <td>거래처명 입력</td>
+                            <th>주소</th>
+                            <td>거래처명 입력</td>
+                        </tr>
+                        <tr>
+                            <th>담당자</th>
+                            <td>담당자 입력</td>
+                            <th>전화번호</th>
+                            <td>전화번호 입력</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="mb-3">
+                        <thead>
+                        <tr>
+                            <th>일자</th>
+                            <th>품목명[규격명]</th>
+                            <th>거래처명</th>
+                            <th>수량(단위 포함)</th>
+                            <th>단가</th>
+                            <th>공급가액</th>
+                            <th>부가세</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2024-09-09</td>
+                            <td>비밀의정원 [96페이지]</td>
+                            <td>도서출판책사</td>
+                            <td>1,000.00EA</td>
+                            <td>9,000</td>
+                            <td>9,000,000</td>
+                            <td>900,000</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <th colspan="3">총 합계</th>
+                            <th>2,000.00</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>수량</th>
+                            <td>2,000</td>
+                            <th>공급가액</th>
+                            <td>21,000,000</td>
+                            <th>VAT</th>
+                            <td>2,100,000</td>
+                            <th>합계</th>
+                            <td>23,100,000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button class="btn btn-primary" onclick="window.print()">인쇄하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/quoList.js}"></script>

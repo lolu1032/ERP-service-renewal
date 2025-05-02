@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="tableBtn">
+            <!-- 발주서 발행 버튼 -->
+            <button id="inspecOpen" type="button" class="btn btn-primary" data-toggle="modal">검수 등록</button>
+        </div>
+        <!-- table -->
+        <div class="table-responsive p-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th scope="col">발주 ID</th>
+                        <th scope="col">발주 코드</th>
+                        <th scope="col">품목 이름</th>
+                        <th scope="col">수량</th>
+                        <th scope="col">납기일자</th>
+                        <th scope="col">협력업체</th>
+                        <th scope="col">금액</th>
+                        <th scope="col">상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order,iter : ${orderList}">
+                        <td><input type="checkbox" class="check-item" th:data-orderId="${order.orderId}"></td>
+                        <td th:text="${order.orderId}" th:data-orderId="${order.orderId}"></td>
+                        <td th:text="${order.orderCode}" th:data-orderCode="${order.orderCode}"></td>
+                        <td th:text="${order.itemName}" th:data-itemName="${order.itemName}"></td>
+                        <td th:text="${order.qty}" th:data-qty="${order.qty}"></td>
+                        <td th:text="${order.leadtime}" th:data-leadtime="${order.leadtime}"></td>
+                        <td th:text="${order.supName}" th:data-supName="${order.supName}"></td>
+                        <td th:text="${order.value}" th:data-value="${order.value}"></td>
+                        <td th:text="${order.status}" th:data-status="${order.status}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal newModal inspecModal fade" id="inspecModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">검수진행 상태</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--                        <input type="text" id="searchInput" class="form-control" placeholder="검색할 내용을 입력하세요.">-->
+                        <table id="inspectionList" class="mt-3">
+                            <thead>
+                            <tr>
+                                <th>발주 코드</th>
+                                <th>품목명</th>
+                                <th>수량</th>
+                                <th>납기일자</th>
+                                <th>협력업체</th>
+                                <th>검수진행상태</th>
+                            </tr>
+                            </thead>
+                            <tbody id="inspectionTableBody">
+                            <!-- 협력업체 데이터 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="inspecSave" type="button" class="btn btn-primary">검수 저장</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/order.js}"></script>
+</th:block>
+
+</html>

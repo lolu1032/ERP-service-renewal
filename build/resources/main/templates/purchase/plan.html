@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- table -->
+        <div class="table-responsive p-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th scope="col">계획 ID</th>
+                    <th scope="col">품목 이름</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">발주 일자</th>
+                    <th scope="col">납기 일자</th>
+                    <th scope="col">상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="plan,iter : ${planList}" th:id="${'list-item-' + plan.plan_id}">
+                    <td><input type="checkbox" class="check-item" th:data-name="${plan.plan_id}"></td>
+                    <td id="plan_id" th:text="${iter.index+1}" th:data-plan_id="${plan.plan_id}"></td>
+                    <td th:text="${plan.item_name}" th:data-item_name="${plan.item_name}"></td>
+                    <td th:text="${plan.qty}" th:data-qty="${plan.qty}"></td>
+                    <td th:text="${plan.date}" th:data-date="${plan.date}"></td>
+                    <td th:text="${plan.leadtime}" th:data-leadtime="${plan.leadtime}"></td>
+                    <td th:text="${plan.status}" th:data-status="${plan.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="tableBtn">
+                <!-- 발주서 발행 버튼 -->
+                <button id="orderCreate" type="button" class="btn btn-primary" data-toggle="modal">발주서 발행</button>
+            </div>
+        </div>
+
+        <!-- 발주서 입력 모달 -->
+        <div class="modal newModal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">발주서 입력</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="mb-3">
+                            <thead>
+                            <tr>
+                                <th scope="col">계획 ID</th>
+                                <th scope="col">품목 이름</th>
+                                <th scope="col">수량</th>
+                                <th scope="col">발주 일자</th>
+                                <th scope="col">납기 일자</th>
+                                <th scope="col">상태</th>
+                            </tr>
+                            </thead>
+                            <tbody id="planModalTableBody">
+                            <!-- 조달계획 데이터 -->
+                            </tbody>
+                        </table>
+                        <table class="mb-3">
+                            <thead>
+                            <tr>
+                                <th scope="col">협력업체</th>
+                                <th scope="col">품목</th>
+                                <th scope="col">수량</th>
+                                <th scope="col">금액</th>
+                                <th scope="col">납기 일자</th>
+                            </tr>
+                            </thead>
+                            <tbody id="orderModalTableBody">
+                            <tr>
+
+                                <input id="order_sup_id" class="form-control" type="text" hidden>
+                                <input id="order_plan_id" class="form-control" type="text" hidden>
+                                <input id="order_item_id" class="form-control" type="text" hidden>
+                                <td>
+                                    <div class="input-group">
+                                        <input id="order_sup_name" type="text" class="form-control" readonly>
+                                        <div class="input-group-append">
+                                            <span id="myBtn_in" class="input-group-text" data-toggle="modal" data-target="#searchModal">
+                                                <i class="fas fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><input id="order_item_name" class="form-control" type="text" readonly></td>
+                                <td><input id="order_qty" class="form-control" type="text"></td>
+                                <td><input id="order_value" class="form-control" type="text"></td>
+                                <td><input id="order_leadtime" class="form-control" type="date" readonly></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeBtn" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button id="createOrder" type="button" class="btn btn-primary">발주서 발행</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 협력업체 검색 모달 -->
+        <div class="modal newModal supplierModal fade" id="searchModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">협력업체 검색</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+<!--                        <input type="text" id="searchInput" class="form-control" placeholder="검색할 내용을 입력하세요.">-->
+                        <table id="supplierList" class="mt-3">
+                            <thead>
+                            <tr>
+                                <th>회사 ID</th>
+                                <th>회사 코드</th>
+                                <th>회사 명</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- 협력업체 데이터 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button id="supSelect" type="button" class="btn btn-primary">협력업체 선택</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/plan.js}"></script>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <header>
+        <h1 th:text="${#strings.equals(action, 'add') ? '품목 추가' : '품목 수정'}"></h1>
+    </header>
+
+    <form th:action="${#strings.equals(action, 'add') ? '/item/add' : '/item/edit'}" th:object="${itemDTO}" method="post">
+        <div class="form-group">
+            <label for="name">품목명</label>
+            <input type="text" id="name" class="form-control" th:field="*{name}" placeholder="품목명을 입력하세요" required>
+        </div>
+
+        <div class="form-group">
+            <label for="spec">사양</label>
+            <input type="text" id="spec" class="form-control" th:field="*{spec}" placeholder="사양을 입력하세요" required>
+        </div>
+
+        <div class="form-group">
+            <label for="unit">단위</label>
+            <input type="text" id="unit" class="form-control" th:field="*{unit}" placeholder="단위를 입력하세요" required>
+        </div>
+
+        <div class="form-group">
+            <label for="price">가격</label>
+            <input type="number" id="price" class="form-control" th:field="*{price}" placeholder="가격을 입력하세요" required>
+        </div>
+
+        <div class="form-group" th:if="${#strings.equals(action, 'edit')}">
+            <label for="createDate">생성일</label>
+            <input type="text" id="createDate" class="form-control" th:field="*{createDate}" readonly>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" th:text="${#strings.equals(action, 'add') ? '추가' : '수정'}"></button>
+            <a href="/item/list" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+</th:block>
+</html>

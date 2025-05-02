@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+  <div>
+    <div class="p-3 mb-3 bxShadow">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>출고 번호</th>
+          <th>품목명</th>
+          <th>출고 수량</th>
+          <th>출고 위치</th>
+          <th>상태</th>
+          <th>출고 날짜</th>
+          <th>액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="shipment : ${shipmentList}">
+          <td th:text="${shipment.shipId}">출고 번호</td>
+          <td th:text="${shipment.itemName}">품목명</td>
+          <td th:text="${shipment.qty}">출고 수량</td>
+          <td th:text="${shipment.loc}">출고 위치</td>
+          <td>
+            <span th:switch="${shipment.status}">
+              <span class="badge badge-warning" th:case="'REQUESTED'">출고 요청</span>
+              <span class="badge badge-info" th:case="'PROCESSING'">진행중</span>
+              <span class="badge badge-success" th:case="'COMPLETED'">출고 완료</span>
+              <span class="badge badge-danger" th:case="'REJECTED'">반려</span>
+              <span th:case="*" th:text="${shipment.status}"></span>
+            </span>
+          </td>
+          <td th:text="${#temporals.format(shipment.reqDate, 'yyyy-MM-dd')}">출고 날짜</td>
+          <td>
+            <a class="btn btn-dark mr-2" th:href="@{/shipment/cancel/{shipId}(shipId=${shipment.shipId})}">취소</a>
+            <a class="btn btn-primary" th:href="@{/shipment/detail/{shipmentId}(shipmentId=${shipment.shipId})}">상세 보기</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="tableBtn">
+        <a class="btn btn-primary" th:href="@{/shipment/list}">목록</a>
+      </div>
+
+    </div>
+  </div>
+
+</th:block>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- table -->
+        <div class="table-responsive p-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">발주 코드</th>
+                    <th scope="col">품목 이름</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">납기일자</th>
+                    <th scope="col">상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orderList}">
+                    <td th:text="${order.orderCode}"></td>
+                    <td th:text="${order.itemName}"></td>
+                    <td th:text="${order.qty}"></td>
+                    <td th:text="${order.leadtime}"></td>
+                    <td th:text="${order.status}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</th:block>
+</html>

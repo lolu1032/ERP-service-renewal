@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="p-3 mb-3 bxShadow">
+            <div class="row">
+                <div class="form-group w-50">
+                    <label>재고 ID</label>
+                    <input type="text" class="form-control" th:value="${stock.stk_id}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>품목명</label>
+                    <input type="text" class="form-control" th:value="${stock.item_name}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>품목 코드</label>
+                    <input type="text" class="form-control" th:value="${stock.item_code}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>수량</label>
+                    <input type="text" class="form-control" th:value="${stock.qty}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>위치</label>
+                    <input type="text" class="form-control" th:value="${stock.loc}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>재고 금액</label>
+                    <input type="text" class="form-control" th:value="${stock.value}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>입고 일자</label>
+                    <input type="text" class="form-control" th:value="${#dates.format(stock.in_date, 'yyyy-MM-dd')}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>유효 기간</label>
+                    <input type="text" class="form-control" th:value="${#dates.format(stock.exp_date, 'yyyy-MM-dd')}" readonly>
+                </div>
+                <div class="form-group w-50">
+                    <label>잔여 수량</label>
+                    <input type="text" class="form-control" th:value="${stock.qty}" readonly>
+                </div>
+            </div>
+
+            <div class="tableBtn">
+                <a th:href="@{/stock/list}" class="btn btn-primary">목록</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

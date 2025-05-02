@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- 상단 검색 -->
+        <div class="p-3 mb-3 bxShadow searchForm">
+            <form th:action="@{/stock/calculate}" method="get" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="startDate" class="form-label">시작일</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" th:value="${startDate}">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDate" class="form-label">종료일</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" th:value="${endDate}">
+                </div>
+                <div class="col-md-3">
+                    <label for="filterType" class="form-label">조회 유형</label>
+                    <select id="filterType" class="form-select">
+                        <option value="all">전체</option>
+                        <option value="incoming">입고 내역</option>
+                        <option value="outgoing">출고 내역</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">검색</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 요약 정보 대시보드 -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">재고 현황 개요</h5>
+                        <canvas id="stockOverviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">입출고 현황</h5>
+                        <canvas id="inOutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">총 재고 품목</h5>
+                        <p class="card-text fs-4" th:text="${#lists.size(stockCalculation)}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">총 현재 재고</h5>
+                        <p class="card-text fs-4" th:text="${#aggregates.sum(stockCalculation.![current_qty])}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">총 입고 수량</h5>
+                        <p class="card-text fs-4" th:text="${#aggregates.sum(stockCalculation.![incoming_quantity])}">0</p>
+                        <a href="/input/paging" class="btn btn-sm btn-outline-primary">입고 기록 보기</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">총 출고 수량</h5>
+                        <p class="card-text fs-4" th:text="${#aggregates.sum(stockCalculation.![outgoing_quantity])}">0</p>
+                        <a href="/shipment/list" class="btn btn-sm btn-outline-primary">출고 기록 보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 데이터 테이블 -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">재고 상세 정보</h5>
+                <div class="table-responsive">
+                    <table id="stockTable" class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>품목명</th>
+                            <th>입고 수량</th>
+                            <th>출고 수량</th>
+                            <th>현재 재고</th>
+                            <th>위치</th>
+                            <th>공급가</th>
+                            <th>입고 날짜</th>
+                            <th>출고 날짜</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock : ${stockCalculation}">
+                            <td th:text="${stock.item_name}"></td>
+                            <td th:text="${stock.incoming_quantity}"></td>
+                            <td th:text="${stock.outgoing_quantity}"></td>
+                            <td th:text="${stock.current_qty}"></td>
+                            <td th:text="${stock.loc}"></td>
+                            <td th:text="${#numbers.formatDecimal(stock.value, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${#dates.format(stock.in_date, 'yyyy-MM-dd')}"></td>
+                            <td th:text="${stock.last_completed_date != null ? #dates.format(stock.last_completed_date, 'yyyy-MM-dd') : 'N/A'}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+            // DataTables 초기화
+            var table = $('#stockTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Korean.json'
+                },
+                initComplete: function() {
+                    var api = this.api();
+                    $('#filterType').on('change', function() {
+                        var filterValue = $(this).val();
+                        if (filterValue === "all") {
+                            api.search('').columns().search('').draw();
+                        } else if (filterValue === "incoming") {
+                            api.column(1).search('^[^0]', true, false).draw();
+                        } else if (filterValue === "outgoing") {
+                            api.column(2).search('^[^0]', true, false).draw();
+                        }
+                    });
+                }
+            });
+
+            // Reset filter when the page is loaded or refreshed
+            $('#filterType').val('all');
+            table.search('').columns().search('').draw();
+
+            // Chart.js 초기화
+            var currentStock = [[${#aggregates.sum(stockCalculation.![current_qty])}]];
+            var incomingStock = [[${#aggregates.sum(stockCalculation.![incoming_quantity])}]];
+            var outgoingStock = [[${#aggregates.sum(stockCalculation.![outgoing_quantity])}]];
+
+            // 재고 현황 개요 차트
+            var stockOverviewCtx = document.getElementById('stockOverviewChart').getContext('2d');
+            new Chart(stockOverviewCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['현재 재고', '입고 수량', '출고 수량'],
+                    datasets: [{
+                        data: [currentStock, incomingStock, outgoingStock],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '재고 현황 개요'
+                        }
+                    }
+                }
+            });
+
+            // 입출고 현황 차트
+            var inOutCtx = document.getElementById('inOutChart').getContext('2d');
+            new Chart(inOutCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['입고 수량', '출고 수량'],
+                    datasets: [{
+                        label: '수량',
+                        data: [incomingStock, outgoingStock],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '입출고 현황'
+                        }
+                    }
+                }
+            });
+        });
+        /*]]>*/
+    </script>
+</th:block>
+</html>

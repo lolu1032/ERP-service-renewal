@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+  <div class="text-center">
+    <img th:src="@{/img/error.svg}" style="max-height: 100px;" class="mb-3">
+    <h3 class="text-gray-800 font-weight-bold">401 Page Not Found</h3>
+    <p class="lead text-gray-800 mx-auto pt-2">
+      접근 권한이 부족합니다.<br>
+      로그인 또는 관리자에게 문의해 주세요.
+    </p>
+    <!--<a href="../index.html">&larr; Back to Dashboard</a>-->
+  </div>
+</th:block>
+</html>

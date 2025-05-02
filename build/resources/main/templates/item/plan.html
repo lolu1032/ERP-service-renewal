@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+  <div>
+    <!-- 상단 검색 -->
+    <div class="p-3 mb-3 bxShadow saerchForm">
+      <form id="searchForm" class="row">
+        <div class="searchFormInner">
+          <div class="dateInput">
+            <p>일자</p>
+            <div class="input-group date">
+              <input type="text" class="form-control" id="DataInput">
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>거래처</p>
+            <div class="input-group">
+              <input type="text" id="client" class="form-control" name="client" placeholder="거래처">
+            </div>
+          </div>
+          <div class="deliveryDateInput">
+            <p>납기일자</p>
+            <div class="input-group date">
+              <input type="text" class="form-control" id="DeliveryDataInput">
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">검색</button>
+      </form>
+    </div>
+    <!-- table -->
+    <div class="table-responsive p-3 bxShadow">
+      <table class="table">
+        <thead class="thead-light">
+        <tr>
+          <th>번호</th>
+          <th>계획일자</th>
+          <th>물품이름</th>
+          <th>수량</th>
+          <th>단가</th>
+          <th>총가격</th>
+          <th>납기일자</th>
+          <th>계획 현황</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="list,iter : ${list}">
+          <td th:text="${iter.index + 1}"></td>
+          <td th:text="${list.date}">계획일자</td>
+          <td th:text="${list.item_name}">물품이름</td>
+          <td th:text="${list.qty}">수량</td>
+          <td th:text="${#numbers.formatInteger(list.price,3,'COMMA')}+'원'">단가</td>
+          <td th:text="${#numbers.formatInteger(list.price * list.qty,3,'COMMA')}+'원'">총가격</td>
+          <td th:text="${list.leadtime}">납기일자</td>
+          <td th:text="${list.status}">계획 현황</td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end">
+        <!-- <button id="quotationBtn" type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#newItemModal">견적보기</button> -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chitModal">추가</button>
+      </div>
+    </div>
+
+    <!-- 조달계획 모달 -->
+    <div class="modal newModal fade" id="chitModal" tabindex="-1" role="dialog" aria-labelledby="chitModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="width: 500px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title">조달계획 추가</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/item/insertForm" method="post">
+              <div class="row">
+                <div class="form-group">
+                  <label for="date">조달계획 일자</label>
+                  <div class="planDateInput">
+                    <div class="input-group date">
+                      <input type="text" id="date" name="date" class="form-control" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="itemId">품목 이름</label>
+                  <select id="itemId" name="itemId" class="form-control" style="max-height: 200px; overflow-y: auto;">
+                    <div th:each="list : ${list}">
+                      <option th:value="${list.item_id}" th:data-id="${list.item_id}" th:text="${list.item_name}">Item 1</option>
+                    </div>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="deadline">납기 일자</label>
+                  <div class="DVPlanDateInput">
+                    <div class="input-group date">
+                      <input type="text" id="deadline" name="deadline" class="form-control" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="quantity">갯수</label>
+                  <input type="number" id="quantity" name="quantity" class="form-control" min="1" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="status">거래 현황</label>
+                  <select id="status" name="status" class="form-control">
+                    <option value="발주 진행 중">발주 진행 중</option>
+                    <option value="발주 대기 중">발주 대기 중</option>
+                    <option value="발주취소">발주취소</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-primary" type="submit">저장</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+</html>
+<script th:src="@{/js/date.js}"></script>

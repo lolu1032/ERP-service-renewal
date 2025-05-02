@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="table-responsive p-3 bxShadow">
+            <div class="mb-3" style="display:flex; justify-content:space-between;">
+                <select style="width:120px;" class="form-select form-select-lg" aria-label=".form-select-lg example">
+                    <option selected>10</option>
+                    <option value="1">20</option>
+                    <option value="2">50</option>
+                    <option value="3">100</option>
+                </select>
+                <form method="post" action="/input/search" style="display:flex;">
+                    <div class="input-group" style="width:210px;">
+                        <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+                               aria-describedby="search-addon" name="keyword"/>
+                        <div class="input-group-append">
+                            <button class="input-group-text" id="search-addon" style="height: 43px;"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>번호</th>
+                    <th>받은날짜</th>
+                    <th>협력회사</th>
+                    <th>창고</th>
+                    <th>품목</th>
+                    <th>수량</th>
+                    <th style="text-align: center;">검수 상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list,iter : ${boardList}" th:id="${list.inputId}">
+                    <td th:text="${iter.index + 1}">번호</td>
+                    <td th:text="${list.recDate}">받은날짜</td>
+                    <td th:text="${list.supName}">협력회사</td>
+                    <td></td>
+<!--                    <td th:text="${list.invenName}">창고</td>-->
+                    <td th:text="${list.itemName}">품목</td>
+                    <td th:text="${list.qty}">수량</td>
+                    <td style="text-align: center;">
+                        <button type="button" class="modal-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${list.inputId}">진행중</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example mt-3">
+                <ul class="pagination">
+                    <li class="page-item" th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" >
+                        <a class="page-link" th:href="@{/input/paging(page=${i})}" th:text="${i}">1</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 검수창 모달 -->
+        <div class="modal newModal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">검수창</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form method="post" action="/input/inseception">
+                            <table class="mb-3">
+                                <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>받은날짜</th>
+                                    <th>협력회사</th>
+                                    <th>창고</th>
+                                    <th>품목</th>
+                                    <th>수량</th>
+                                    <th style="text-align: center;">검수처리</th>
+                                </tr>
+                                </thead>
+                                <tbody class="modal-table">
+
+                                </tbody>
+                            </table>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="save-btn btn btn-primary">저장</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/list.js}"></script>

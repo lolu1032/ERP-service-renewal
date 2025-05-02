@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <div class="table-responsive p-3 bxShadow">
+            <div class="mb-3" style="display:flex; justify-content:space-between;">
+                <select style="width:120px;" class="form-select form-select-lg" aria-label=".form-select-lg example">
+                    <option selected>10</option>
+                    <option value="1">20</option>
+                    <option value="2">50</option>
+                    <option value="3">100</option>
+                </select>
+                <div style="display: flex; align-items: center;">
+                    <form action="input/transaction">
+                        <input type="submit" value="전체보기" class="btn btn-primary mr-2" style="height: 43px;">
+                    </form>
+                    <form method="post" action="/input/searchTrans" style="display:flex;">
+                        <div class="input-group" style="width:210px;">
+                            <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+                                   aria-describedby="search-addon" name="keyword"/>
+                            <div class="input-group-append">
+                                <button class="input-group-text" id="search-addon" style="height: 43px;"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>발주코드</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>납기일자</th>
+                    <th>협력업체</th>
+                    <th style="text-align: center;">발주상태</th>
+                </tr>
+                </thead>
+                <tbody th:each="trans : ${list}">
+                <!-- 거래 정보 목록 렌더링 -->
+                <tr>
+                    <td th:text="${trans.orderCode}">발주코드</td>
+                    <td th:text="${trans.itemName}">상품명</td>
+                    <td th:text="${trans.qty}">수량</td>
+                    <td th:text="${trans.leadtime}">납기일자</td>
+                    <td th:text="${trans.supName}">협력업체</td>
+                    <td style="text-align: center;" th:text="${trans.status}">발주상태</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(trans)}">
+                    <td colspan="6" style="text-align: center;">거래 명세서가 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/list.js}"></script>

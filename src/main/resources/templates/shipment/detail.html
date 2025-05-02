@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+  <div class="container mt-4">
+    <h2 class="mb-4">출고 상세 정보</h2>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <strong>출고 ID:</strong> <span th:text="${shipment.shipId}"></span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>품목명:</strong> <span th:text="${shipment.itemName}"></span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>요청 수량:</strong> <span th:text="${shipment.reqQty}"></span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>출고 수량:</strong> <span th:text="${shipment.qty}"></span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>상태:</strong>
+            <span th:switch="${shipment.status}">
+            <span class="badge badge-warning" th:case="'REQUESTED'">출고 요청</span>
+            <span class="badge badge-info" th:case="'PROCESSING'">진행중</span>
+            <span class="badge badge-success" th:case="'COMPLETED'">출고 완료</span>
+            <span class="badge badge-danger" th:case="'REJECTED'">반려</span>
+            <span th:case="*" th:text="${shipment.status}"></span>
+          </span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>요청 날짜:</strong> <span th:text="${#temporals.format(shipment.reqDate, 'yyyy-MM-dd')}"></span>
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>위치:</strong> <span th:text="${shipment.loc}"></span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-primary" data-toggle="modal" data-target="#statusModal">상태 변경</button>
+          <a class="btn btn-info" th:href="@{/shipment/check-stock/{id}(id=${shipment.shipId})}">재고 확인</a>
+          <a class="btn btn-secondary" th:href="@{/shipment/list}">목록으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상태 변경 모달 -->
+  <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusModalLabel">출고 상태 변경</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form th:action="@{/shipment/update-status}" method="post">
+          <div class="modal-body">
+            <input type="hidden" name="shipId" th:value="${shipment.shipId}">
+            <div class="form-group">
+              <label for="status">새로운 상태</label>
+              <select class="form-control" id="status" name="status">
+                <option value="PROCESSING">진행중</option>
+                <option value="COMPLETED">출고 완료</option>
+                <option value="REJECTED">반려</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="qty">출고 수량</label>
+              <input type="number" class="form-control" id="qty" name="qty" th:value="${shipment.reqQty}">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            <button type="submit" class="btn btn-primary">확인</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</th:block>
+</html>

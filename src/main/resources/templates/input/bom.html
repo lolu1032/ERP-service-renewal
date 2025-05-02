@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- table -->
+        <div class="table-responsive p-3 bxShadow">
+            <div class="mb-3" style="display:flex; justify-content:end;">
+                <form method="post" action="/input/search" style="display:flex;">
+                    <div class="input-group" style="width:210px;">
+                        <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+                               aria-describedby="search-addon" name="keyword"/>
+                        <div class="input-group-append">
+                            <button class="input-group-text" id="search-addon" style="height: 43px;"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>발주코드</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>납기일자</th>
+                    <th>협력업체</th>
+                    <th style="text-align: center;">발주상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+
+                </tr>
+                </tbody>
+            </table>
+            <div class="tableBtn">
+                <button type="button" class="modal-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal">추가</button>
+            </div>
+        </div>
+
+        <!-- 구매발주서 모달 -->
+        <div class="modal newModal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">구매 발주서</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="">
+                            <table class="table mb-3">
+                                <thead>
+                                <tr>
+                                    <th>발주코드</th>
+                                    <th>상품명</th>
+                                    <th>수량</th>
+                                    <th>납기일자</th>
+                                    <th>협력업체</th>
+                                    <th style="text-align: center;">발주상태</th>
+                                </tr>
+                                </thead>
+                                <tbody class="modal-table" th:each="orders : ${orders}">
+                                <th th:text="${orders.orderCode}">발주코드</th>
+                                <th th:text="${orders.itemName}">상품명</th>
+                                <th>수량</th>
+                                <th th:text="${orders.leadtime}">납기일자</th>
+                                <th>협력업체</th>
+                                <th style="text-align: center;">
+                                    <select name="" id="">
+                                        <option value="완료" th:text="${orders.status}"></option>
+                                        <option value="마감">마감</option>
+                                    </select>
+                                </th>
+                                </tbody>
+                            </table>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="save-btn btn btn-primary">저장</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

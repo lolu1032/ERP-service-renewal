@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- 상단 검색 -->
+        <div class="p-3 mb-3 bxShadow saerchForm">
+            <form th:action="@{/stock/calculate-value}" method="get" class="row">
+                <div class="searchFormInner">
+                    <div class="dateInput">
+                        <p>시작일</p>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="startDate" name="startDate">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deliveryDateInput">
+                        <p>종료일</p>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="endDate" name="endDate">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">재고 금액 계산</button>
+            </form>
+        </div>
+
+        <div class="p-3 mb-3 bxShadow">
+            <div>전체 재고의 총 금액 : <span th:text="${totalStockValue}"></span></div>
+
+            <div class="tableBtn">
+                <a th:href="@{/stock/list}" class="btn btn-primary">목록</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/date.js}"></script>

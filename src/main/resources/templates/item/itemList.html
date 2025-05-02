@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div>
+        <!-- 상단 검색 -->
+        <div class="p-3 mb-3 bxShadow saerchForm">
+            <form id="searchForm" class="row">
+                <div class="searchFormInner">
+                    <div class="dateInput">
+                        <p>일자</p>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="DataInput">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>거래처</p>
+                        <div class="input-group">
+                            <input type="text" id="client" class="form-control" name="client" placeholder="거래처">
+                        </div>
+                    </div>
+                    <div class="deliveryDateInput">
+                        <p>납기일자</p>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="DeliveryDataInput">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">검색</button>
+            </form>
+        </div>
+        <!-- table -->
+        <div class="table-responsive p-3 bxShadow">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>품목 ID</th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>소요수량</th>
+                    <th>소요위치</th>
+                    <th>소요기간</th>
+                    <th>규격명</th>
+                    <th>단가</th>
+                    <th>품목구분</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="stock : ${stockList}" th:id="${'list-item-' + stock.item_id}">
+                    <td><input type="checkbox" class="check-item" data-name="${stock.item_id}"></td>
+                    <td th:text="${stock.item_id}" data-item_id="${stock.item_id}"></td>
+                    <td th:text="${stock.item_code}" data-item_code="${stock.item_code}"></td>
+                    <td th:text="${stock.item_name}" data-item_name="${stock.name}"></td>
+                    <td style="color: red" th:text="${stock.cons_qty}" data-qty="${stock.cons_qty}"></td>
+                    <td th:text="${stock.cons_loc}" data-cons_loc="${stock.cons_loc}"></td>
+                    <td th:text="${stock.cons_date}" data-date="${stock.cons_date}"></td>
+                    <td th:text="${stock.spec}" data-spec="${stock.spec}"></td>
+                    <td th:text="${stock.price}" data-price="${stock.price}"></td>
+                    <td th:text="${stock.type}" data-type="${stock.type}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="tableBtn">
+                <!-- <button type="button" class="btn btn-outline-primary mr-2" data-toggle="modal" data-target="#chitModal">명세서</button> -->
+                <button id="quotationBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#newItemModal">견적서 조회</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 견적서 등록 Modal -->
+    <div class="modal newModal fade" id="newItemModal" tabindex="-1" role="dialog" aria-labelledby="newItemModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">견적서 보기</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>품목명</th>
+                            <th>소요수량</th>
+                            <th>단가</th>
+                            <th>총금액</th>
+                            <th>납기일자</th>
+                        </tr>
+                        </thead>
+                        <tbody id="quotationTableBody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button id="quoCreate" type="button" class="btn btn-primary">견적서 등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 명세서 Modal -->
+    <div class="modal newModal fade" id="chitModal" tabindex="-1" role="dialog" aria-labelledby="chitModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">명세서</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="newModalTit"><h5>거래명세서</h5></div>
+                    <table class="mb-3">
+                        <tbody>
+                        <tr>
+                            <th>거래처명</th>
+                            <td>거래처명 입력</td>
+                            <th>주소</th>
+                            <td>거래처명 입력</td>
+                        </tr>
+                        <tr>
+                            <th>담당자</th>
+                            <td>담당자 입력</td>
+                            <th>전화번호</th>
+                            <td>전화번호 입력</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="mb-3">
+                        <thead>
+                        <tr>
+                            <th>일자</th>
+                            <th>품목명[규격명]</th>
+                            <th>거래처명</th>
+                            <th>수량(단위 포함)</th>
+                            <th>단가</th>
+                            <th>공급가액</th>
+                            <th>부가세</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2024-09-09</td>
+                            <td>비밀의정원 [96페이지]</td>
+                            <td>도서출판책사</td>
+                            <td>1,000.00EA</td>
+                            <td>9,000</td>
+                            <td>9,000,000</td>
+                            <td>900,000</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <th colspan="3">총 합계</th>
+                            <th>2,000.00</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>수량</th>
+                            <td>2,000</td>
+                            <th>공급가액</th>
+                            <td>21,000,000</td>
+                            <th>VAT</th>
+                            <td>2,100,000</td>
+                            <th>합계</th>
+                            <td>23,100,000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button class="btn btn-primary" onclick="window.print()">인쇄하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script th:src="@{/js/itemList.js}"></script>
+<script th:src="@{/js/date.js}"></script>

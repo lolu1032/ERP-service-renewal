@@ -1,0 +1,85 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.erp'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+dependencies {
+	// Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// Thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+
+	// Excel 파일 생성을 위한 Apache POI
+	implementation 'org.apache.poi:poi:5.2.3'
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+	// PDF 파일 생성을 위한 iText (또는 다른 PDF 라이브러리)
+	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+
+	// CSV 파일 생성을 위한 OpenCSV (선택적)
+	implementation 'com.opencsv:opencsv:5.7.1'
+
+	// 웹 애플리케이션 개발을 위한 Spring Boot Starter Web (이미 포함되어 있을 수 있음)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+javadoc {
+	// 입력할 소스 디렉터리 설정
+	source = fileTree("src/main/java") {
+		include "com/erp/mes/input/controller/*.java"
+		include "com/erp/mes/input/service/*.java"
+		include "com/erp/mes/input/repository/*.java"
+	}
+
+	classpath += configurations.compileClasspath
+
+	options.encoding = 'UTF-8'
+	options.charSet = 'UTF-8'
+	options.locale = 'ko_KR'
+
+	failOnError = false // 오류 있어도 빌드 중단 안 함
+	destinationDir = file("$buildDir/docs/javadoc") // 문서 생성 위치
+}

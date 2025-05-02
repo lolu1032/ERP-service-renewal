@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{include/layout/defaultLayout.html}">
+
+<th:block layout:fragment="Content">
+    <div class="mainContent">
+        <div class="calendar">
+            <div class="calendarTit">
+                <div class="calendarBtnBox">
+                    <span class="calendarBtn" id="btnPrevCalendar"></span>
+                    <span class="calendarBtn" id="nextNextCalendar"></span>
+                </div>
+                <div class="calendarWeek">
+                    <span id="calYear">YYYY</span>년
+                    <span id="calMonth">MM</span>월
+                </div>
+                <button id="todayBtn">Today</button>
+            </div>
+            <table class="scriptCalendar bxShadow">
+                <thead>
+                    <tr>
+                        <td>일</td>
+                        <td>월</td>
+                        <td>화</td>
+                        <td>수</td>
+                        <td>목</td>
+                        <td>금</td>
+                        <td>토</td>
+                    </tr>
+                </thead>
+                <tbody class="calendarDay"></tbody>
+            </table>
+        </div>
+        <div class="boardArea bxShadow">
+            <div class="board">
+                <div class="board_title">
+                    <span>공지사항</span>
+                    <a href="#" class="more">+</a>
+                </div>
+                <ul class="board_list">
+                    <li>
+                        <a href="#"><span>[공지] ex</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>[공지] ex 123123123123123123</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="board">
+                <div class="board_title">
+                    <span>추가영역</span>
+                    <a href="#" class="more">+</a>
+                </div>
+                <ul class="board_list">
+                    <li>
+                        <a href="#"><span>[공지] ex</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><span>[공지] ex 123123123123123123</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
