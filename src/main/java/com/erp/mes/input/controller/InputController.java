@@ -1,6 +1,10 @@
 
 package com.erp.mes.input.controller;
-
+/**
+ * 컨트룰러 클래스.
+ *
+ * 컨트룰러 로직입니다.
+ */
 import com.erp.mes.input.domain.InputDTO;
 import com.erp.mes.dto.OrderDTO;
 import com.erp.mes.dto.PageDTO;
@@ -14,11 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-/**
- * 컨트룰러 클래스.
- *
- * 컨트룰러 로직입니다.
- */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/input")
@@ -33,7 +32,7 @@ public class InputController {
      * @return
      */
     @ModelAttribute("servletPath")
-    String getRequestServletPath(HttpServletRequest request) {
+    public String getRequestServletPath(HttpServletRequest request) {
         return request.getServletPath();
     }
     @PostMapping("/inputList")
