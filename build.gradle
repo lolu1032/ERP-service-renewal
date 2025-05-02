@@ -47,7 +47,7 @@ dependencies {
 
 	// 웹 애플리케이션 개발을 위한 Spring Boot Starter Web (이미 포함되어 있을 수 있음)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
+	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

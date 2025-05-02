@@ -8,7 +8,7 @@
 ## 프로젝트 끝날시 주석해야 할 파일
 # Gradle 관련 파일
 .gradle/
-application.properties
+
 # IntelliJ IDEA 관련 파일
 .idea/
 # User-specific stuff
