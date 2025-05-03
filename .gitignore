@@ -211,6 +211,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/java,macos,intellij,windows,sass
+# 프로젝트 루트에 있는 .env
+.env
 
+# src/main/resources 내부 .env
 src/main/resources/.env
+
+# End of https://www.toptal.com/developers/gitignore/api/java,macos,intellij,windows,sass
