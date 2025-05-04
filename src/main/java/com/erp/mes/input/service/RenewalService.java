@@ -30,4 +30,37 @@ public class RenewalService {
         return ResponseEntity.ok("업데이트 되었습니다.");
     }
 
+    /**
+     * 발주 상태를 실제로 업데이트하는 서비스 메소드입니다.
+     *
+     * 이 메소드는 `InputStatusRequest` 객체에서 발주 상태를 처리하고,
+     * 상태값이 `'완료'`인지 확인한 뒤 해당 상태를 데이터베이스에 업데이트합니다.
+     *
+     * 상태값이 `'완료'`일 경우 "발주 완료 되었습니다." 메시지를 반환하며,
+     * `'완료'`가 아닐 경우 "발주 미완료" 메시지를 반환합니다.
+     *
+     * 만약 입력값 중 `orderCode` 또는 `selectValue`가 비어 있으면,
+     * `400 Bad Request` 응답을 반환하고 오류 메시지를 전달합니다.
+     *
+     * @param request 발주 상태 업데이트에 필요한 데이터가 담긴 `InputStatusRequest` 객체
+     * @return 상태 업데이트 성공 시 적절한 메시지와 함께 200 OK 응답을 반환합니다.
+     *         입력값이 비어 있으면 400 Bad Request와 함께 오류 메시지를 반환합니다.
+     */
+    public ResponseEntity<String> updateInputStatus(InputStatusRequest request) {
+        String message;
+
+        if(request.orderCode().isEmpty() || request.selectValue().isEmpty()) {
+            return ResponseEntity.badRequest().body("값을 입력해주세요.");
+        }
+        inputMapper.updateInputStatus(request);
+
+        if(!request.selectValue().equals("완료")) {
+            message = "발주 미완료";
+        }else {
+            message = "발주 완료 되었습니다.";
+        }
+
+        return ResponseEntity.ok(message);
+    }
+
 }

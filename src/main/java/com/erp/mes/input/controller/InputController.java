@@ -35,15 +35,6 @@
 //    public String getRequestServletPath(HttpServletRequest request) {
 //        return request.getServletPath();
 //    }
-////    @PostMapping("/inputList")
-////    public String inputForm(InputDTO inputDTO) {
-////        int n = service.inputForm(inputDTO);
-////        if(n > 0) {
-////            return "input/inputList";
-////        }else {
-////            return "401";
-////        }
-////    }
 //    @PostMapping("/inseception")
 //    public String inseceptionForm(
 //            @RequestParam("orderCode") String orderCode,

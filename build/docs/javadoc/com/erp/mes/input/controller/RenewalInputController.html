@@ -110,6 +110,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">창고 입고 품목에 대해 검수를 수행하고 관련된 데이터(공급자, 창고, 품목, 수량)를 업데이트합니다.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateInputStatus(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest)" class="member-name-link">updateInputStatus</a><wbr>(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest&nbsp;request)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">발주 상태를 업데이트합니다.</div>
+</div>
 </div>
 </div>
 </div>
@@ -153,6 +158,25 @@ loadScripts(document, 'script');</script>
 <dd><code>request</code> - 검수 요청에 필요한 공급자명, 창고명, 품목명, 수량, inputId 등을 담은 요청 객체</dd>
 <dt>Returns:</dt>
 <dd>검수 처리 결과에 따른 성공 또는 실패 메시지를 포함한 HTTP 응답</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateInputStatus(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest)">
+<h3>updateInputStatus</h3>
+<div class="member-signature"><span class="annotations">@PostMapping("/status")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">updateInputStatus</span><wbr><span class="parameters">(@RequestBody
+ com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest&nbsp;request)</span></div>
+<div class="block">발주 상태를 업데이트합니다.
+
+ 이 메소드는 클라이언트로부터 전달받은 `InputStatusRequest` 객체를 기반으로
+ 발주 상태를 업데이트하며, 요청이 성공적으로 처리되면 `성공` 메시지를 반환합니다.
+ 입력값이 누락된 경우 400 상태 코드와 함께 오류 메시지를 반환합니다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>request</code> - 발주 상태 업데이트에 필요한 데이터가 담긴 `InputStatusRequest` 객체</dd>
+<dt>Returns:</dt>
+<dd>상태 업데이트 결과에 따라 성공 메시지 또는 오류 메시지를 포함한 HTTP 응답을 반환합니다.</dd>
 </dl>
 </section>
 </li>

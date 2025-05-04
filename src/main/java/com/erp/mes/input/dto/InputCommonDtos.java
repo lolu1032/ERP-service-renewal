@@ -11,4 +11,10 @@ public final class InputCommonDtos {
             int qty,
             Long inputId
     ) {}
+
+    @Builder
+    public record  InputStatusRequest(
+            String orderCode,
+            String selectValue
+    ){}
 }

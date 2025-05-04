@@ -49,14 +49,14 @@
         WHERE transaction.tran_id = #{tranId}
     </update>
 
-    <select id="selectOrder" resultType="map">
+    <select id="selectOrder">
         SELECT order.date, order.leadtime, order.status, order.value,
         item.name, item.price, item.unit
         FROM `order`
         JOIN item ON item.item_id = order.item_id
     </select>
 
-    <update id="updateInputStatus" parameterType="map">
+    <update id="updateInputStatus">
         <choose>
             <when test="selectValue == '완료'">
                 UPDATE `order`
