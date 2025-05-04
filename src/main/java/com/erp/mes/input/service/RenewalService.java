@@ -1,10 +1,13 @@
 package com.erp.mes.input.service;
 
+import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;
 import com.erp.mes.input.repository.InputMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,4 +66,18 @@ public class RenewalService {
         return ResponseEntity.ok(message);
     }
 
+    /**
+     * 키워드를 기반으로 주문 정보를 검색하고, 결과 여부에 따라 응답 메시지를 반환합니다.
+     *
+     * @param keyword 검색할 키워드 (공급업체명, 주문 코드, 품목명 등)
+     * @return 검색 결과가 존재하면 "검색완료" 메시지를 포함한 200 OK 응답,
+     *         결과가 없으면 "검색결과가 없습니다." 메시지를 포함한 400 Bad Request 응답
+     */
+    public ResponseEntity<String> search(String keyword) {
+        List<OrderDTO> list = inputMapper.searchInput(keyword);
+        if(list.isEmpty()) {
+            return ResponseEntity.badRequest().body("검색결과가 없습니다.");
+        }
+        return ResponseEntity.ok("검색완료");
+    }
 }

@@ -1,5 +1,6 @@
 package com.erp.mes.input.controller;
 
+import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;
 import com.erp.mes.input.service.RenewalService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,5 +44,16 @@ public class RenewalInputController {
             @RequestBody InputStatusRequest request
     ) {
         return service.updateInputStatus(request);
+    }
+
+    /**
+     * 주문 정보를 키워드로 검색합니다.
+     *
+     * @param keyword 검색할 키워드 (공급업체명, 주문 코드, 품목명 등)
+     * @return 검색 결과가 존재하면 "검색완료", 없으면 "검색결과가 없습니다." 메시지를 포함한 HTTP 응답
+     */
+    @PostMapping("/search")
+    public ResponseEntity<String> search(@RequestParam String keyword) {
+        return service.search(keyword);
     }
 }

@@ -104,7 +104,7 @@
         LIMIT #{start}, #{limit}
     </select>
 
-    <select id="searchInput" resultType="map" parameterType="com.erp.mes.input.domain.OrderDTO">
+    <select id="searchInput" parameterType="string" resultType="map">
         SELECT order.order_code AS orderCode, item.name AS itemName,
         plan.qty, plan.leadtime, order.status,
         supplier.name AS supName, order.value
@@ -114,9 +114,11 @@
         JOIN item ON item.item_id = plan.item_id
         <where>
             <if test="keyword != null">
-                (supplier.name LIKE concat('%', #{keyword}, '%')
-                OR order.order_code LIKE concat('%', #{keyword}, '%')
-                OR item.name LIKE concat('%', #{keyword}, '%'))
+                (
+                order.order_code LIKE concat('%', #{keyword}, '%')
+                OR supplier.name LIKE concat('%', #{keyword}, '%')
+                OR item.name LIKE concat('%', #{keyword}, '%')
+                )
                 AND order.insep_status = false
             </if>
         </where>

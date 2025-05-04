@@ -111,8 +111,13 @@ loadScripts(document, 'script');</script>
 <div class="block">품목 입고 검수 요청을 처리합니다.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateInputStatus(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest)" class="member-name-link">updateInputStatus</a><wbr>(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest&nbsp;request)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#search(java.lang.String)" class="member-name-link">search</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyword)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">키워드를 기반으로 주문 정보를 검색하고, 결과 여부에 따라 응답 메시지를 반환합니다.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateInputStatus(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest)" class="member-name-link">updateInputStatus</a><wbr>(com.erp.mes.input.dto.InputCommonDtos.InputStatusRequest&nbsp;request)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">발주 상태를 실제로 업데이트하는 서비스 메소드입니다.</div>
 </div>
 </div>
@@ -184,6 +189,20 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>상태 업데이트 성공 시 적절한 메시지와 함께 200 OK 응답을 반환합니다.
          입력값이 비어 있으면 400 Bad Request와 함께 오류 메시지를 반환합니다.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="search(java.lang.String)">
+<h3>search</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">search</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyword)</span></div>
+<div class="block">키워드를 기반으로 주문 정보를 검색하고, 결과 여부에 따라 응답 메시지를 반환합니다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>keyword</code> - 검색할 키워드 (공급업체명, 주문 코드, 품목명 등)</dd>
+<dt>Returns:</dt>
+<dd>검색 결과가 존재하면 "검색완료" 메시지를 포함한 200 OK 응답,
+         결과가 없으면 "검색결과가 없습니다." 메시지를 포함한 400 Bad Request 응답</dd>
 </dl>
 </section>
 </li>
