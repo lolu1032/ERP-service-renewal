@@ -1,12 +1,10 @@
-package com.erp.mes.dto;
+package com.erp.mes.input.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Getter

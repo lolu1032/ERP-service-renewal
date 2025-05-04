@@ -1,13 +1,11 @@
 package com.erp.mes.service;
 
-import com.erp.mes.dto.InspectionDTO;
-import com.erp.mes.dto.OrderDTO;
+import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.dto.PlanDTO;
 import com.erp.mes.dto.SupplierDTO;
 import com.erp.mes.mapper.PurchaseMapper;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.rtf.RTFEditorKit;
 import java.util.List;
 import java.util.Map;
 

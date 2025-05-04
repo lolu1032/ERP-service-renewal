@@ -1,8 +1,8 @@
 package com.erp.mes.sqlBuilder;
 
 import com.erp.mes.input.domain.InputDTO;
-import com.erp.mes.dto.OrderDTO;
-import com.erp.mes.dto.TransactionDTO;
+import com.erp.mes.input.domain.OrderDTO;
+import com.erp.mes.input.domain.TransactionDTO;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;

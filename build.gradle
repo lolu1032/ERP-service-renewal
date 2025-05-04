@@ -34,7 +34,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
 	// Excel 파일 생성을 위한 Apache POI
@@ -71,9 +70,8 @@ tasks.named('test') {
 javadoc {
 	// 입력할 소스 디렉터리 설정
 	source = fileTree("src/main/java") {
-		include "com/erp/mes/input/controller/*.java"
-		include "com/erp/mes/input/service/*.java"
-		include "com/erp/mes/input/repository/*.java"
+		include "com/erp/mes/input/controller/RenewalInputController.java"
+		include "com/erp/mes/input/service/RenewalService.java"
 	}
 
 	classpath += configurations.compileClasspath

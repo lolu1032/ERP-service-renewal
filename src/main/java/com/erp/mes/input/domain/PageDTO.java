@@ -1,4 +1,4 @@
-package com.erp.mes.dto;
+package com.erp.mes.input.domain;
 
 import lombok.Getter;
 import lombok.Setter;

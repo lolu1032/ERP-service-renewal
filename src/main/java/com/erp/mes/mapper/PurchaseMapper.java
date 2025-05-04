@@ -1,7 +1,6 @@
 package com.erp.mes.mapper;
 
-import com.erp.mes.dto.InspectionDTO;
-import com.erp.mes.dto.OrderDTO;
+import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.dto.PlanDTO;
 import com.erp.mes.dto.SupplierDTO;
 import com.erp.mes.sqlBuilder.PurchaseBuilder;

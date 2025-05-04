@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.erp.mes.input.repository.InputMapper">
+
+    <update id="updateInput" parameterType="com.erp.mes.input.domain.InputDTO">
+        UPDATE input
+        JOIN transaction ON transaction.tran_id = input.tran_id
+        JOIN supplier ON supplier.sup_code = transaction.sup_code
+        JOIN plan ON plan.plan_id = transaction.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        JOIN inventory ON inventory.inven_id = supplier.inven_id
+        <set>
+            <if test="supName != null">supplier.name = #{supName},</if>
+            <if test="invenName != null">inventory.name = #{invenName},</if>
+            <if test="itemName != null">item.name = #{itemName},</if>
+            <if test="qty != 0">plan.qty = #{qty},</if>
+        </set>
+        WHERE input.input_id = #{inputId}
+    </update>
+
+    <select id="selectTransaction" resultType="map">
+        SELECT transaction.date, transaction.val, input.exp_date,
+        plan.qty, item.name, item.price, item.unit
+        FROM transaction
+        JOIN plan ON plan.plan_id = transaction.plan_id
+        JOIN input ON input.tran_id = transaction.tran_id
+        JOIN item ON item.item_id = plan.item_id
+    </select>
+
+    <update id="updateTransaction" parameterType="com.erp.mes.input.domain.TransactionDTO">
+        UPDATE transaction
+        JOIN plan ON plan.plan_id = transaction.plan_id
+        JOIN input ON input.tran_id = transaction.tran_id
+        JOIN item ON item.item_id = plan.item_id
+        <set>
+            <if test="date != null">transaction.date = #{date},</if>
+            <if test="expDate != null">input.exp_date = #{expDate},</if>
+            <if test="qty != 0">plan.qty = #{qty},</if>
+            <if test="itemName != null">
+                item.name = #{itemName},
+                item.price = #{price},
+                item.unit = #{unit},
+                transaction.val = #{price} * #{qty},
+            </if>
+        </set>
+        WHERE transaction.tran_id = #{tranId}
+    </update>
+
+    <select id="selectOrder" resultType="map">
+        SELECT order.date, order.leadtime, order.status, order.value,
+        item.name, item.price, item.unit
+        FROM `order`
+        JOIN item ON item.item_id = order.item_id
+    </select>
+
+    <update id="updateInputStatus" parameterType="map">
+        <choose>
+            <when test="selectValue == '완료'">
+                UPDATE `order`
+                SET insep_status = 1,
+                status = '발주완료'
+                WHERE order_code = #{orderCode}
+            </when>
+            <otherwise>
+                UPDATE `order`
+                SET insep_status = 0
+                WHERE order_code = #{orderCode}
+            </otherwise>
+        </choose>
+    </update>
+
+    <select id="selectPaging" resultType="map" parameterType="map">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        WHERE order.insep_status = 0
+        ORDER BY order_id DESC
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="pageCount" resultType="int">
+        SELECT count(input_id)
+        FROM `input`
+        WHERE input.type = false
+    </select>
+
+    <select id="selectPagingTrue" resultType="map" parameterType="map">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        WHERE order.insep_status = 1
+        ORDER BY order_id DESC
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="searchInput" resultType="map" parameterType="com.erp.mes.input.domain.OrderDTO">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        <where>
+            <if test="keyword != null">
+                (supplier.name LIKE concat('%', #{keyword}, '%')
+                OR order.order_code LIKE concat('%', #{keyword}, '%')
+                OR item.name LIKE concat('%', #{keyword}, '%'))
+                AND order.insep_status = false
+            </if>
+        </where>
+    </select>
+
+    <select id="pageCountTrue" resultType="int">
+        SELECT count(*)
+        FROM `input`
+        WHERE input.type = true
+    </select>
+
+    <select id="selectOrders" resultType="map" parameterType="map">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        WHERE order.status = '발주완료'
+    </select>
+
+    <select id="selectTrans" resultType="map" parameterType="map">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        WHERE order.status = '발주완료'
+    </select>
+
+    <select id="selectTransList" resultType="map" parameterType="map">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        WHERE order.status = '발주마감'
+    </select>
+
+    <update id="updateTrans" parameterType="map">
+        UPDATE `order`
+        SET status = '발주마감'
+        WHERE order_code IN
+        <foreach item="code" index="index" collection="orderCodes" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </update>
+
+    <select id="searchTrans" resultType="map" parameterType="com.erp.mes.input.domain.OrderDTO">
+        SELECT order.order_code AS orderCode, item.name AS itemName,
+        plan.qty, plan.leadtime, order.status,
+        supplier.name AS supName, order.value
+        FROM `order`
+        JOIN supplier ON supplier.sup_id = order.sup_id
+        JOIN plan ON plan.plan_id = order.plan_id
+        JOIN item ON item.item_id = plan.item_id
+        <where>
+            <if test="keyword != null">
+                (supplier.name LIKE concat('%', #{keyword}, '%')
+                OR order.order_code LIKE concat('%', #{keyword}, '%')
+                OR item.name LIKE concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+</mapper>
