@@ -3,6 +3,7 @@ package com.erp.mes.input.service;
 import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;
 import com.erp.mes.input.repository.InputMapper;
+import jakarta.xml.ws.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,21 @@ public class RenewalService {
             return ResponseEntity.badRequest().body("검색결과가 없습니다.");
         }
         return ResponseEntity.ok("검색완료");
+    }
+
+    /**
+     * 주문 코드 리스트를 받아 상태를 일괄적으로 '발주마감'으로 업데이트합니다.
+     *
+     * @param list 클라이언트에서 전달된 OrderCode 객체 리스트
+     * @return 처리 결과에 따른 HTTP 응답. 실패 시 400, 성공 시 200 반환
+     */
+    public ResponseEntity<String> updateOrdering(List<OrderCode> list) {
+        if(list.get(0).orderCode().isEmpty()) {
+            return ResponseEntity.badRequest().body("값 입력을 안했습니다.");
+        }
+
+        inputMapper.updateTrans(list);
+
+        return ResponseEntity.ok("발주마감 업데이트 되었습니다.");
     }
 }

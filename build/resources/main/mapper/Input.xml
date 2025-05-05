@@ -167,10 +167,11 @@
         UPDATE `order`
         SET status = '발주마감'
         WHERE order_code IN
-        <foreach item="code" index="index" collection="orderCodes" open="(" separator="," close=")">
-            #{code}
+        <foreach item="code" index="index" collection="list" open="(" separator="," close=")">
+            #{code.orderCode}
         </foreach>
     </update>
+
 
     <select id="searchTrans" resultType="map" parameterType="com.erp.mes.input.domain.OrderDTO">
         SELECT order.order_code AS orderCode, item.name AS itemName,

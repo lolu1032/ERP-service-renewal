@@ -56,4 +56,25 @@ public class RenewalInputController {
     public ResponseEntity<String> search(@RequestParam String keyword) {
         return service.search(keyword);
     }
+
+    /**
+     * 주문 코드 리스트를 받아 해당 주문들의 상태를 '발주마감'으로 일괄 변경합니다.
+     *
+     * <p>요청 본문으로 JSON 배열 형태의 주문 코드 리스트를 받아 처리하며, 성공 시 '성공' 메시지를 반환합니다.</p>
+     *
+     * 예시 요청:
+     * ```json
+     * [
+     *   { "orderCode": "ORD001" },
+     *   { "orderCode": "ORD002" }
+     * ]
+     * ```
+     *
+     * @param list 클라이언트에서 전달된 주문 코드(OrderCode) 객체 리스트
+     * @return 처리 결과에 따라 성공 시 200 OK, 실패 시 400 Bad Request 반환
+     */
+    @PostMapping("/transaction")
+    public ResponseEntity<String> updateOrdering(@RequestBody List<OrderCode> list) {
+        return service.updateOrdering(list);
+    }
 }

@@ -120,6 +120,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">발주 상태를 업데이트합니다.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateOrdering(java.util.List)" class="member-name-link">updateOrdering</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.erp.mes.input.dto.InputCommonDtos.OrderCode&gt;&nbsp;list)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">주문 코드 리스트를 받아 해당 주문들의 상태를 '발주마감'으로 일괄 변경합니다.</div>
+</div>
 </div>
 </div>
 </div>
@@ -197,6 +202,31 @@ loadScripts(document, 'script');</script>
 <dd><code>keyword</code> - 검색할 키워드 (공급업체명, 주문 코드, 품목명 등)</dd>
 <dt>Returns:</dt>
 <dd>검색 결과가 존재하면 "검색완료", 없으면 "검색결과가 없습니다." 메시지를 포함한 HTTP 응답</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateOrdering(java.util.List)">
+<h3>updateOrdering</h3>
+<div class="member-signature"><span class="annotations">@PostMapping("/transaction")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">updateOrdering</span><wbr><span class="parameters">(@RequestBody
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.erp.mes.input.dto.InputCommonDtos.OrderCode&gt;&nbsp;list)</span></div>
+<div class="block">주문 코드 리스트를 받아 해당 주문들의 상태를 '발주마감'으로 일괄 변경합니다.
+
+ <p>요청 본문으로 JSON 배열 형태의 주문 코드 리스트를 받아 처리하며, 성공 시 '성공' 메시지를 반환합니다.</p>
+
+ 예시 요청:
+ ```json
+ [
+   { "orderCode": "ORD001" },
+   { "orderCode": "ORD002" }
+ ]
+ ```</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>list</code> - 클라이언트에서 전달된 주문 코드(OrderCode) 객체 리스트</dd>
+<dt>Returns:</dt>
+<dd>처리 결과에 따라 성공 시 200 OK, 실패 시 400 Bad Request 반환</dd>
 </dl>
 </section>
 </li>

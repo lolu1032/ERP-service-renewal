@@ -17,4 +17,9 @@ public final class InputCommonDtos {
             String orderCode,
             String selectValue
     ){}
+
+    @Builder
+    public record OrderCode(
+            String orderCode
+    ) {}
 }
