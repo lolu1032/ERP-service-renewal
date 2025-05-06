@@ -92,20 +92,27 @@ public class RenewalInputController {
     ){
         return service.paging(page,size);
     }
-
-//    @GetMapping("/bom")
-//    public List<OrderDTO> bom() {
-//        List<OrderDTO> orders = service.selectOrders();
-//        return orders;
-//    }
-//    @GetMapping("/transaction")
-//    public String transaction(Model model) {
-//        List<OrderDTO> trans = service.selectTran();
-//        log.info("trans={}",trans);
-//        List<OrderDTO> transList = service.selectTranList();
-//        model.addAttribute("trans",trans);
-//        model.addAttribute("list",transList);
-//        return "input/transaction";
-//    }
+    /**
+     * 발주완료 상태의 주문 목록을 반환하는 API 엔드포인트입니다.
+     *
+     * @return 발주완료 상태의 주문 목록 (OrderDTO 리스트)
+     *
+     * <p>GET /bom</p>
+     */
+    @GetMapping("/bom")
+    public List<OrderDTO> bom() {
+        return service.bom();
+    }
+    /**
+     * 발주마감 상태의 주문 목록을 반환하는 API 엔드포인트입니다.
+     *
+     * @return 발주마감 상태의 주문 목록 (OrderDTO 리스트)
+     *
+     * <p>GET /transaction</p>
+     */
+    @GetMapping("/transaction")
+    public List<OrderDTO> transaction() {
+        return service.transaction();
+    }
 
 }

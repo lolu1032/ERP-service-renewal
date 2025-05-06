@@ -19,4 +19,8 @@ public interface InputMapper {
     int updateTrans(List<OrderCode> list);
 
     List<OrderDTO> selectPaging(Map<String,Integer> map);
+
+    List<OrderDTO> selectOrders();
+
+    List<OrderDTO> selectTransList();
 }

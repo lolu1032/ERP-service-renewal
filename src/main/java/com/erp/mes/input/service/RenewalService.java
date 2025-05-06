@@ -118,4 +118,24 @@ public class RenewalService {
         List<OrderDTO> list = inputMapper.selectPaging(map);
         return list;
     }
+    /**
+     * 발주 상태가 '발주완료'인 주문 목록을 조회합니다.
+     *
+     * @return 발주완료 상태의 주문 정보 리스트 (OrderDTO 리스트)
+     *
+     * <p>관련 SQL: selectOrders</p>
+     */
+    public List<OrderDTO> bom() {
+        return inputMapper.selectOrders();
+    }
+    /**
+     * 발주 상태가 '발주마감'인 주문 목록을 조회합니다.
+     *
+     * @return 발주마감 상태의 주문 정보 리스트 (OrderDTO 리스트)
+     *
+     * <p>관련 SQL: selectTransList</p>
+     */
+    public List<OrderDTO> transaction() {
+        return inputMapper.selectTransList();
+    }
 }
