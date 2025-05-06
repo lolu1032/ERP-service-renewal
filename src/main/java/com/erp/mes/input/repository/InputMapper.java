@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface InputMapper {
@@ -16,4 +17,6 @@ public interface InputMapper {
     List<OrderDTO> searchInput(String keyword);
 
     int updateTrans(List<OrderCode> list);
+
+    List<OrderDTO> selectPaging(Map<String,Integer> map);
 }

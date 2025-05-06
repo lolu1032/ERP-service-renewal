@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -79,7 +81,7 @@ public class RenewalService {
         if(list.isEmpty()) {
             return ResponseEntity.badRequest().body("검색결과가 없습니다.");
         }
-        return ResponseEntity.ok("검색완료");
+        return ResponseEntity.ok(list.toString());
     }
 
     /**
@@ -96,5 +98,24 @@ public class RenewalService {
         inputMapper.updateTrans(list);
 
         return ResponseEntity.ok("발주마감 업데이트 되었습니다.");
+    }
+
+    /**
+     * 지정된 페이지 번호와 페이지 크기를 기준으로 주문 목록을 페이징하여 조회합니다.
+     *
+     * @param page 조회할 페이지 번호 (0부터 시작)
+     * @param size 페이지당 조회할 항목 수
+     * @return 페이징된 주문 목록 (OrderDTO 리스트)
+     *
+     * <p>예: page=0, size=10 → 0~9번 항목을 반환</p>
+     */
+    public List<OrderDTO> paging(int page,int size) {
+        Map<String,Integer> map = new HashMap<>();
+
+        map.put("start", page);
+        map.put("limit", size);
+
+        List<OrderDTO> list = inputMapper.selectPaging(map);
+        return list;
     }
 }

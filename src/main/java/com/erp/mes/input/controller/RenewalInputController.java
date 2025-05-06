@@ -5,10 +5,7 @@ import com.erp.mes.input.dto.InputCommonDtos.*;
 import com.erp.mes.input.service.RenewalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,7 +49,7 @@ public class RenewalInputController {
      * @param keyword 검색할 키워드 (공급업체명, 주문 코드, 품목명 등)
      * @return 검색 결과가 존재하면 "검색완료", 없으면 "검색결과가 없습니다." 메시지를 포함한 HTTP 응답
      */
-    @PostMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<String> search(@RequestParam String keyword) {
         return service.search(keyword);
     }
@@ -77,4 +74,38 @@ public class RenewalInputController {
     public ResponseEntity<String> updateOrdering(@RequestBody List<OrderCode> list) {
         return service.updateOrdering(list);
     }
+
+    /**
+     * 주문 목록을 페이징 처리하여 조회하는 API 엔드포인트입니다.
+     *
+     * @param page 요청할 페이지 번호 (기본값: 0)
+     * @param size 한 페이지에 포함될 항목 수 (기본값: 10)
+     * @return 지정된 페이지에 해당하는 주문 목록 (OrderDTO 리스트)
+     *
+     * <p>예: GET /paging?page=1&size=5 → 6~10번째 항목 조회</p>
+     */
+    @GetMapping("/paging")
+    public List<OrderDTO> paging
+    (
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ){
+        return service.paging(page,size);
+    }
+
+//    @GetMapping("/bom")
+//    public List<OrderDTO> bom() {
+//        List<OrderDTO> orders = service.selectOrders();
+//        return orders;
+//    }
+//    @GetMapping("/transaction")
+//    public String transaction(Model model) {
+//        List<OrderDTO> trans = service.selectTran();
+//        log.info("trans={}",trans);
+//        List<OrderDTO> transList = service.selectTranList();
+//        model.addAttribute("trans",trans);
+//        model.addAttribute("list",transList);
+//        return "input/transaction";
+//    }
+
 }
