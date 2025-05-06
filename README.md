@@ -1,8 +1,10 @@
-# 프로젝트명 (ERP 입고 관리 시스템)
+# 프로젝트명 (ERP 담당 파트 - 입고)
 
 ## 개요
-1년전에 작성해본 
+1년전에 완성 시켰던 팀프로젝트 ERP 입고 프로세스를 맡았으며 1년전에는 어떤식으로 코드를 작성했는지 보며 현재의 내가 다시 코드를 파악하고 작성해보자는 계기로 시작하게되었습니다.
 
+## 1년전 깃허브 주소
+https://github.com/lolu1032/ERP_Service.git
 ## 기술 스택
 - 백엔드: Spring Boot 3.x, Spring Web, MyBatis
 - 프론트엔드: Thymeleaf
@@ -17,15 +19,17 @@
 - 발주 상태에 따른 목록 구분 (`/bom`, `/transaction`)
 
 ## 리뉴얼 프로젝트 구조
+```
 src/
-├── input
-├──├── controller/
-├──├── domain/
-├──├── dto/
-├──├── repository/
-├──├── service/
-└──resources/
-└──├── mapper/
+├── input/
+│   ├── controller/
+│   ├── domain/
+│   ├── dto/
+│   ├── repository/
+│   └── service/
+└── resources/
+    └── mapper/
+```
 
 ## 주요 API 예시
 
@@ -39,7 +43,6 @@ Body: {
   "quantity": 100,
   "inputId": 5
 }
-```http
 POST /transaction
 Body: [
   { "orderCode": "ORD001" },
