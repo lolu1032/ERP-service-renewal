@@ -23,6 +23,11 @@ jobs:
       - name: Build Javadoc
         run: ./gradlew javadoc
 
+      - name: Fix Javadoc paths
+        run: |
+          find ./build/docs/javadoc -type f -name "*.html" -exec sed -i 's|href="javadoc/stylesheet.css|href="css/stylesheet.css|g' {} \;
+          find ./build/docs/javadoc -type f -name "*.html" -exec sed -i 's|href="javadoc/script-dir/jquery-ui.min.css|href="css/jquery-ui.min.css|g' {} \;
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
