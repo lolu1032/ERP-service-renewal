@@ -30,7 +30,17 @@ src/
 └── resources/
     └── mapper/
 ```
+## Javadoc
+Javadoc 주소
+https://lolu1032.github.io/ERP-service-renewal/
 
+본 프로젝트의 모든 서비스, 도메인, 컨트롤러 클래스에 대해 Javadoc으로 문서화되어 있습니다.
+이를 통해 클래스 간의 역할과 메서드의 기능을 명확히 이해할 수 있도록 구성했습니다.
+
+```bash
+./gradlew javadoc
+build/docs/javadoc/index.html
+```
 ## 주요 API 예시
 
 ### 1. 품목 검수 처리
@@ -48,13 +58,5 @@ Body: [
   { "orderCode": "ORD001" },
   { "orderCode": "ORD002" }
 ]
-```
-## Javadoc
-본 프로젝트의 모든 서비스, 도메인, 컨트롤러 클래스에 대해 Javadoc으로 문서화되어 있습니다.
-이를 통해 클래스 간의 역할과 메서드의 기능을 명확히 이해할 수 있도록 구성했습니다.
-
-```bash
-./gradlew javadoc
-build/docs/javadoc/index.html
 ```
 
