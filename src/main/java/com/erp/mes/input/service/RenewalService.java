@@ -2,8 +2,9 @@ package com.erp.mes.input.service;
 
 import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;
-import com.erp.mes.input.repository.InputMapper;
-import jakarta.xml.ws.Response;
+import com.erp.mes.input.mapper.InputMapper;
+import com.erp.mes.input.repository.InputMyBatisMapper;
+import com.erp.mes.input.vo.OrderVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class RenewalService {
-    private final InputMapper inputMapper;
+    private final InputMyBatisMapper inputMyBatisMapper;
+    private final InputMapper mapper;
 
     /**
      * 품목 입고 검수 요청을 처리합니다.
@@ -32,7 +34,7 @@ public class RenewalService {
         if(request.supName().isEmpty() || request.invenName().isEmpty() || request.itemName().isEmpty() || request.qty() == 0 || request.inputId() == null) {
             return ResponseEntity.badRequest().body("값을 입력해주세요.");
         }
-        inputMapper.updateInput(request);
+        inputMyBatisMapper.updateInput(request);
         return ResponseEntity.ok("업데이트 되었습니다.");
     }
 
@@ -55,12 +57,14 @@ public class RenewalService {
     public ResponseEntity<String> updateInputStatus(InputStatusRequest request) {
         String message;
 
+        String selectValue = request.selectValue();
         if(request.orderCode().isEmpty() || request.selectValue().isEmpty()) {
             return ResponseEntity.badRequest().body("값을 입력해주세요.");
         }
-        inputMapper.updateInputStatus(request);
+        OrderVo vo = mapper.toOrderVo(request);
+        inputMyBatisMapper.updateInputStatus(vo);
 
-        if(!request.selectValue().equals("완료")) {
+        if(!selectValue.equals("완료")) {
             message = "발주 미완료";
         }else {
             message = "발주 완료 되었습니다.";
@@ -77,7 +81,7 @@ public class RenewalService {
      *         결과가 없으면 "검색결과가 없습니다." 메시지를 포함한 400 Bad Request 응답
      */
     public ResponseEntity<String> search(String keyword) {
-        List<OrderDTO> list = inputMapper.searchInput(keyword);
+        List<OrderDTO> list = inputMyBatisMapper.searchInput(keyword);
         if(list.isEmpty()) {
             return ResponseEntity.badRequest().body("검색결과가 없습니다.");
         }
@@ -95,7 +99,7 @@ public class RenewalService {
             return ResponseEntity.badRequest().body("값 입력을 안했습니다.");
         }
 
-        inputMapper.updateTrans(list);
+        inputMyBatisMapper.updateTrans(list);
 
         return ResponseEntity.ok("발주마감 업데이트 되었습니다.");
     }
@@ -115,7 +119,7 @@ public class RenewalService {
         map.put("start", page);
         map.put("limit", size);
 
-        List<OrderDTO> list = inputMapper.selectPaging(map);
+        List<OrderDTO> list = inputMyBatisMapper.selectPaging(map);
         return list;
     }
     /**
@@ -126,7 +130,7 @@ public class RenewalService {
      * <p>관련 SQL: selectOrders</p>
      */
     public List<OrderDTO> bom() {
-        return inputMapper.selectOrders();
+        return inputMyBatisMapper.selectOrders();
     }
     /**
      * 발주 상태가 '발주마감'인 주문 목록을 조회합니다.
@@ -136,6 +140,6 @@ public class RenewalService {
      * <p>관련 SQL: selectTransList</p>
      */
     public List<OrderDTO> transaction() {
-        return inputMapper.selectTransList();
+        return inputMyBatisMapper.selectTransList();
     }
 }

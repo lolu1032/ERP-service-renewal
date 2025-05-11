@@ -1,4 +1,4 @@
-package com.erp.mes.input.Vo;
+package com.erp.mes.input.vo;
 
 import java.time.Instant;
 

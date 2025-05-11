@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.erp.mes.input.repository.InputMapper">
+<mapper namespace="com.erp.mes.input.repository.InputMyBatisMapper">
 
     <update id="updateInput" parameterType="com.erp.mes.input.domain.InputDTO">
         UPDATE input

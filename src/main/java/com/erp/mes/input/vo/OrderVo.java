@@ -1,4 +1,4 @@
-package com.erp.mes.input.Vo;
+package com.erp.mes.input.vo;
 
 import java.time.Instant;
 
@@ -7,7 +7,7 @@ public class OrderVo {
     private String orderCode;
     private Instant date;
     private String status;
-    private String value;
+    private int value;
     private String insepStatus;
     // 외래키
     private int supId;

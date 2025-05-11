@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Getter
@@ -16,8 +17,8 @@ public class InputDTO {
     // 입고
     private int inputId; // 기본키
     private boolean type; // 0과 1 미/확정
-    private LocalDate expDate; // 출고예정일
-    private LocalDate recDate; // 받은날
+    private Instant expDate; // 출고예정일
+    private Instant recDate; // 받은날
     private int tranId; // 거래내역 외래키
 
     // 거래내역
