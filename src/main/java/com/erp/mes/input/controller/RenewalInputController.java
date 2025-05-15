@@ -22,7 +22,7 @@ public class RenewalInputController {
      * @return 검수 처리 결과에 따른 성공 또는 실패 메시지를 포함한 HTTP 응답
      */
     @PostMapping("inputList")
-    public ResponseEntity<String> itemInspec(@RequestBody ItemInspecRequest request) {
+    public ResponseEntity<ApiResponse> itemInspec(@RequestBody ItemInspecRequest request) {
        return service.itemInspec(request);
     }
 
@@ -37,7 +37,7 @@ public class RenewalInputController {
      * @return 상태 업데이트 결과에 따라 성공 메시지 또는 오류 메시지를 포함한 HTTP 응답을 반환합니다.
      */
     @PostMapping("/status")
-    public ResponseEntity<String> updateInputStatus(
+    public ResponseEntity<ApiResponse> updateInputStatus(
             @RequestBody InputStatusRequest request
     ) {
         return service.updateInputStatus(request);
@@ -50,7 +50,7 @@ public class RenewalInputController {
      * @return 검색 결과가 존재하면 "검색완료", 없으면 "검색결과가 없습니다." 메시지를 포함한 HTTP 응답
      */
     @GetMapping("/search")
-    public ResponseEntity<String> search(@RequestParam String keyword) {
+    public ResponseEntity<ApiResponse> search(@RequestParam String keyword) {
         return service.search(keyword);
     }
 
@@ -71,7 +71,7 @@ public class RenewalInputController {
      * @return 처리 결과에 따라 성공 시 200 OK, 실패 시 400 Bad Request 반환
      */
     @PostMapping("/transaction")
-    public ResponseEntity<String> updateOrdering(@RequestBody List<OrderCode> list) {
+    public ResponseEntity<ApiResponse> updateOrdering(@RequestBody List<OrderCode> list) {
         return service.updateOrdering(list);
     }
 

@@ -1,6 +1,7 @@
 package com.erp.mes.input.dto;
 
 import lombok.Builder;
+import org.springframework.http.HttpStatus;
 
 public final class InputCommonDtos {
     @Builder
@@ -22,4 +23,10 @@ public final class InputCommonDtos {
     public record OrderCode(
             String orderCode
     ) {}
+
+    @Builder
+    public record ApiResponse(
+            String message,
+            HttpStatus status
+    ){}
 }

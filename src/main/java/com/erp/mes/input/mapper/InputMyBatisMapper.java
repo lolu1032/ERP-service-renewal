@@ -1,4 +1,4 @@
-package com.erp.mes.input.repository;
+package com.erp.mes.input.mapper;
 
 import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;

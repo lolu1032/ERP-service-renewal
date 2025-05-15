@@ -9,6 +9,7 @@ public class OrderVo {
     private String status;
     private int value;
     private String insepStatus;
+    private String selectValue;
     // 외래키
     private int supId;
     private int planId;

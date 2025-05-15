@@ -1,11 +1,14 @@
 package com.erp.mes.input.service;
 
+import com.erp.mes.input.ErrorCode;
 import com.erp.mes.input.domain.OrderDTO;
 import com.erp.mes.input.dto.InputCommonDtos.*;
 import com.erp.mes.input.mapper.InputMapper;
-import com.erp.mes.input.repository.InputMyBatisMapper;
+import com.erp.mes.input.mapper.InputMyBatisMapper;
 import com.erp.mes.input.vo.OrderVo;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,6 @@ import java.util.Map;
 public class RenewalService {
     private final InputMyBatisMapper inputMyBatisMapper;
     private final InputMapper mapper;
-
     /**
      * 품목 입고 검수 요청을 처리합니다.
      *
@@ -30,13 +32,18 @@ public class RenewalService {
      * @return 입력값이 유효하면 200 OK 및 "업데이트 되었습니다." 메시지 반환,
      *         유효하지 않으면 400 Bad Request 및 "값을 입력해주세요." 메시지 반환
      */
-    public ResponseEntity<String> itemInspec(ItemInspecRequest request) {
+    public ResponseEntity<ApiResponse> itemInspec(ItemInspecRequest request) {
         if(request.supName().isEmpty() || request.invenName().isEmpty() || request.itemName().isEmpty() || request.qty() == 0 || request.inputId() == null) {
-            return ResponseEntity.badRequest().body("값을 입력해주세요.");
+            return getApiResponseResponseEntity();
         }
         inputMyBatisMapper.updateInput(request);
-        return ResponseEntity.ok("업데이트 되었습니다.");
+        ApiResponse sucessResponse = ApiResponse.builder()
+                .status(HttpStatus.OK)
+                .message("업데이트 되었습니다.")
+                .build();
+        return ResponseEntity.ok(sucessResponse);
     }
+
 
     /**
      * 발주 상태를 실제로 업데이트하는 서비스 메소드입니다.
@@ -54,12 +61,12 @@ public class RenewalService {
      * @return 상태 업데이트 성공 시 적절한 메시지와 함께 200 OK 응답을 반환합니다.
      *         입력값이 비어 있으면 400 Bad Request와 함께 오류 메시지를 반환합니다.
      */
-    public ResponseEntity<String> updateInputStatus(InputStatusRequest request) {
+    public ResponseEntity<ApiResponse> updateInputStatus(InputStatusRequest request) {
         String message;
 
         String selectValue = request.selectValue();
         if(request.orderCode().isEmpty() || request.selectValue().isEmpty()) {
-            return ResponseEntity.badRequest().body("값을 입력해주세요.");
+            return getApiResponseResponseEntity();
         }
         OrderVo vo = mapper.toOrderVo(request);
         inputMyBatisMapper.updateInputStatus(vo);
@@ -70,7 +77,11 @@ public class RenewalService {
             message = "발주 완료 되었습니다.";
         }
 
-        return ResponseEntity.ok(message);
+        ApiResponse sucessResponse = ApiResponse.builder()
+                .status(HttpStatus.OK)
+                .message(message)
+                .build();
+        return ResponseEntity.ok(sucessResponse);
     }
 
     /**
@@ -80,12 +91,16 @@ public class RenewalService {
      * @return 검색 결과가 존재하면 "검색완료" 메시지를 포함한 200 OK 응답,
      *         결과가 없으면 "검색결과가 없습니다." 메시지를 포함한 400 Bad Request 응답
      */
-    public ResponseEntity<String> search(String keyword) {
+    public ResponseEntity<ApiResponse> search(String keyword) {
         List<OrderDTO> list = inputMyBatisMapper.searchInput(keyword);
         if(list.isEmpty()) {
-            return ResponseEntity.badRequest().body("검색결과가 없습니다.");
+            return getApiResponseResponseEntity();
         }
-        return ResponseEntity.ok(list.toString());
+        ApiResponse sucessResponse = ApiResponse.builder()
+                .status(HttpStatus.OK)
+                .message(list.toString())
+                .build();
+        return ResponseEntity.ok(sucessResponse);
     }
 
     /**
@@ -94,14 +109,17 @@ public class RenewalService {
      * @param list 클라이언트에서 전달된 OrderCode 객체 리스트
      * @return 처리 결과에 따른 HTTP 응답. 실패 시 400, 성공 시 200 반환
      */
-    public ResponseEntity<String> updateOrdering(List<OrderCode> list) {
+    public ResponseEntity<ApiResponse> updateOrdering(List<OrderCode> list) {
         if(list.get(0).orderCode().isEmpty()) {
-            return ResponseEntity.badRequest().body("값 입력을 안했습니다.");
+            return getApiResponseResponseEntity();
         }
 
         inputMyBatisMapper.updateTrans(list);
-
-        return ResponseEntity.ok("발주마감 업데이트 되었습니다.");
+        ApiResponse sucessResponse = ApiResponse.builder()
+                .status(HttpStatus.OK)
+                .message("발주마감 업데이트 되었습니다.")
+                .build();
+        return ResponseEntity.ok(sucessResponse);
     }
 
     /**
@@ -141,5 +159,17 @@ public class RenewalService {
      */
     public List<OrderDTO> transaction() {
         return inputMyBatisMapper.selectTransList();
+    }
+
+    @NotNull
+    private static ResponseEntity<ApiResponse> getApiResponseResponseEntity() {
+        ApiResponse errorResponse = ApiResponse.builder()
+                .status(ErrorCode.NOT_FOUND_VALUE.getStatus())
+                .message(ErrorCode.NOT_FOUND_VALUE.getMessage())
+                .build();
+
+        return ResponseEntity
+                .status(ErrorCode.NOT_FOUND_VALUE.getStatus())
+                .body(errorResponse);
     }
 }
